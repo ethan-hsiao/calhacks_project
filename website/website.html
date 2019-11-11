@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang='en'>
+  
+  <head>
+    <meta charset='UTF-8'/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+
+    <!-- Graph stuff -->
+    <script language="javascript" type="text/javascript" src="sketch.js"></script>
+    <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
+    <script language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script>
+    <script language="javascript" type="text/javascript" src="sketch.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.0/dist/Chart.min.js"></script>
+
+    <title>Site</title>
+    <link rel='stylesheet' href='styles.css'/>
+    <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase.js"></script>
+  </head>
+  
+  <body>
+
+    <div class='logo'>
+        <img src='Logo_Crowd-Insight.png' style="width:50px">
+    </div>
+    <div class='meme'><h1 class='yoom' id="clusters">5</h1></div>
+    
+    <div class='meme' style="height: 100%; width: 100%;">
+        
+        <div id="chartContainer" style="height: 100%; width: 45%;">
+        </div>
+        <!-- <script src="app.js"></script> -->
+        
+    
+        <script type="text/javascript">
+            window.onload = function () {
+                var chart = new CanvasJS.Chart("chartContainer",{backgroundColor: "transparent"},
+                    {width:640,//in pixels
+                    height:480,
+                    title:{
+                        text: "",
+                        fontFamily: '',
+                        fontSize: 15
+                    }
+                
+                });
+                chart.options.data = [{
+                    color: "#ffffff",
+                    type: "bubble",
+                    dataPoints: [
+                    { x: 3, y: 171 , z: 50},
+                    { x: 400, y: 371 , z: 100},
+                    { x: 200, y: 262 , z: 200},
+                    ]
+                }]
+                
+                chart.render();
+                const config = {
+                    apiKey: "AIzaSyD4nCP3edHfKRIT-Agd9u9biTy7kyKk60A",
+                    authDomain: "calhacks-cv.firebaseapp.com",
+                    databaseURL: "https://calhacks-cv.firebaseio.com",
+                    storageBucket: "calhacks-cv.appspot.com"
+                };
+                firebase.initializeApp(config);
+
+                function update_cluster(chart, clust) {
+                    var arrayLength = clust.length;
+                    var dat = []
+                    for (var i = 0; i < chart.options.data.length; i++) {
+                        if (chart.options.data[i]['type'] == 'line') {
+                            dat.push(chart.options.data[i])
+                        }
+                    }
+                    chart.options.data = dat
+                    dat = []
+                    for (var i = 0; i < arrayLength; i++) {
+                        dat.push({ x: clust[i][0], y: 480-clust[i][1] , z: clust[i][2]})
+                    }
+                    console.log(dat)
+                    chart.options.data.push({
+                        color: "#ffffff",
+                        type: "bubble",
+                        dataPoints: dat
+                    })
+                    chart.options.axisY={
+                        gridThickness: 0,
+                        tickLength: 0,
+                        lineColor: "transparent",
+                        minimum: 0,
+                        lineThickness: 0,
+                        maximum: 480,
+                        labelFormatter: function(){
+                        return " ";
+                        }
+                    }
+                    chart.options.axisX={
+                        gridThickness: 0,
+                        minimum: 0,
+                        lineThickness: 0,
+                        tickLength: 0,
+                        maximum: 640,
+                        labelFormatter: function(){
+                        return " ";
+                        }
+                    }
+                    chart.render();
+                }
+                function update_line(chart, lines) {
+                    var arrayLength = lines.length;
+                    var dat = []
+                    for (var i = 0; i < chart.options.data.length; i++) {
+                        if (chart.options.data[i]['type'] == 'bubble') {
+                            dat.push(chart.options.data[i])
+                        }
+                    }
+                    chart.options.data = dat
+                    dat = []
+                    for (var i = 0; i < arrayLength; i++) {
+                        l = []
+                        for (var j = 0; j < lines[i].length; j++) {
+                            l.push({x: lines[i][j][0], y: 480-lines[i][j][1]})
+                        }
+
+                        
+                        dat.push({        
+                            color: "#ffffff",
+                            type: "line",
+                            dataPoints: l
+                        })
+                        console.log(l)
+
+                        chart.options.data.push({        
+                            color: "#ffffff",
+                            type: "line",
+                            dataPoints: l
+                        })
+                    }
+                    console.log(dat)
+                
+                    chart.options.axisY={
+                        gridThickness: 0,
+                        tickLength: 0,
+                        lineColor: "transparent",
+                        minimum: 0,
+                        lineThickness: 0,
+                        maximum: 480,
+                        labelFormatter: function(){
+                        return " ";
+                        }
+                    }
+                    chart.options.axisX={
+                        gridThickness: 0,
+                        minimum: 0,
+                        lineThickness: 0,
+                        tickLength: 0,
+                        maximum: 640,
+                        labelFormatter: function(){
+                        return " ";
+                        }
+                    }
+                    chart.render();
+                }
+                // Get elements
+                const preObject = document.getElementById('clusters');
+                const bubble_chart = document.getElementById('chartContainer');
+                
+                // Create references
+                const dbRefObject = firebase.database().ref().child('clusters');
+
+                //Sync Object  and list changes
+                
+                dbRefObject.endAt().limitToLast(1).on('child_added', function(snapshot) {
+
+                    //Parsing through the string
+                    clusters = snapshot.val().split(",")
+                    clusters.forEach(function(part, index) {
+                        this[index] = this[index].split(" ");
+                    }, clusters);
+                    console.log(clusters)
+                    update_cluster(chart, clusters)
+
+                    
+                });
+
+                const linesObject = firebase.database().ref().child('lines');
+
+                //Sync Object  and list changes
+                
+                linesObject.endAt().limitToLast(1).on('child_added', function(snapshot) {
+
+                    //Parsing through the string
+                    // preObject.innerText = snapshot.val();
+                    lines = snapshot.val().split(",")
+                    lines.forEach(function(part, index) {
+                        arr = this[index].split(" ");
+                        arr.forEach(function(part, index) {
+                            this[index] = this[index].split("-");
+                        }, arr);
+                        this[index] = arr
+                    }, lines);
+                    console.log(lines)
+                    update_line(chart, lines)
+
+                    
+                });
+
+                const numObject = firebase.database().ref().child('num_ppl');
+
+                //Sync Object  and list changes
+                
+                numObject.endAt().limitToLast(1).on('child_added', function(snapshot) {
+
+                    //Parsing through the string
+                    preObject.innerText = "Traffic: "+snapshot.val() + " Humans";
+                    
+                    
+                });
+            }
+        </script>
+    </div>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    
+    
+
+
+
+  
+
+  </body>
+</html>

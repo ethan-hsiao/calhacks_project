@@ -1,0 +1,99 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  /* background-image: url(file:///Users/Mokshith/Downloads/Frontend_CalHacks/noise-back.png); */
+  background-color: black;
+}
+
+.clusters {
+    display: flex;
+    justify-content: center; 
+    text-align: center;
+    color:rgb(255, 255, 255);
+}
+
+.yoom {
+    font-family: 'Roboto', sans-serif;
+    font-size: 50px;
+    color:rgb(255, 255, 255);
+}
+
+.chartContainer {
+    text-align: center;
+    color:rgb(255, 255, 255);
+}
+
+.logo {
+  display: flex;
+  padding: 45px;
+  justify-content: left; 
+}
+
+.date{
+  color:rgb(255, 255, 255);
+  text-shadow: 1px 1px red;
+  font-style: initial;
+  font-size: 20px;
+  font-family: Verdana;
+  padding: 45px 0;
+  display: flex;
+  justify-content: center; 
+  
+}
+.photo-grid-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+
+.meme {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 0;
+   
+  
+  }
+
+.photo-grid {
+  width: 1200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.photo-grid-item-first-item {
+  width: 400px;
+  justify-content: center; 
+  size: 10;
+  height: 300px;
+}
+.photo-grid-item {
+  width: 500px;
+  justify-content: center; 
+  size: 10;
+  height: 300px;
+  padding: 10px;
+}
+.photo-grid-item-2 {
+  width: 200px;
+  justify-content: center; 
+  size: 10;
+  height: 300px;
+  padding: 10px;
+}
+
+#text-item{
+  padding: 60px;
+  font-size: 30px;
+  font-family: Arial;
+  color: white
+}
+

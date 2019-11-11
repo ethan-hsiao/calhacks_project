@@ -1,2 +1,2 @@
-# calhacks_project
-cv for lines of people
+# cal-hacks-2019
+https://devpost.com/software/crowd-insight
